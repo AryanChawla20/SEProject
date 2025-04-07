@@ -69,8 +69,6 @@ To address these challenges, WellnessSync deploys a machine learning model using
    python app.py
    
 ## 👥 Contributors
-Shivam Khosla 
-
-Gauri Bahl
+Aryan Chawla
 
 ## Thank you for using WellnessSync! We hope this tool helps you on your journey to a healthier lifestyle.

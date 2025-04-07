@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Survey Form</title>
+    <link rel="stylesheet" href="/static/css/survey.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Health Survey Form</h2>
+        <form id="survey-form" action="/survey" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" min="0" required>
+
+            <label for="weight">Weight (in kg):</label>
+            <input type="number" id="weight" name="weight" min="0" required>
+
+            <label for="height">Height (in cm):</label>
+            <input type="number" id="height" name="height" min="0" required>
+
+            <label for="bmi">BMI:</label>
+            <input type="number" id="bmi" name="bmi" min="0" required>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="chronic_conditions">Chronic Conditions:</label>
+            <input type="text" id="chronic_conditions" name="chronic_conditions">
+
+            <label for="current_medications">Current Medications:</label>
+            <input type="text" id="current_medications" name="current_medications">
+
+            <label for="hereditary_conditions">Hereditary Conditions:</label>
+            <input type="text" id="hereditary_conditions" name="hereditary_conditions">
+
+            <label for="smoking">Smoking:</label>
+            <select id="smoking" name="smoking" required>
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+
+            <label for="alcohol_consumption">Alcohol Consumption:</label>
+            <select id="alcohol_consumption" name="alcohol_consumption" required>
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+
+            <label for="physical_activity">Physical Activity (times per week):</label>
+            <input type="number" id="physical_activity" name="physical_activity" min="0" required>
+
+            <label for="sleep_patterns">Sleep Patterns (hours per night):</label>
+            <input type="number" id="sleep_patterns" name="sleep_patterns" min="0" required>
+
+            <label for="diet_preferences">Diet Preferences:</label>
+            <select id="diet_preferences" name="diet_preferences" required>
+                <option value="">Select</option>
+                <option value="Vegetarian">Vegetarian</option>
+                <option value="keto">Keto diet</option>
+                <option value="vegan">vegan</option>
+                <option value="Non-Vegetarian">Non-Vegetarian</option>
+            </select>
+
+            <label for="mental_health_status">Mental Health Status:</label>
+            <input type="text" id="mental_health_status" name="mental_health_status">
+
+            <label for="recent_illnesses">Recent Illnesses (past 3 months):</label>
+            <input type="text" id="recent_illnesses" name="recent_illnesses">
+
+            <label for="medication_adherence">Medication Adherence:</label>
+            <input type="text" id="medication_adherence" name="medication_adherence">
+
+            <button type="submit">Submit</button>
+        </form>
+        <h2>Future Health Prediction</h2>
+        <div id="recommendations"></div>
+    </div>
+    <script>
+        document.getElementById('survey-form').onsubmit = function (event) {
+            event.preventDefault();
+            const form = event.target;
+
+            const requestOptions = {
+                method: form.method,
+                body: new FormData(form)
+            };
+
+            fetch(form.action, requestOptions).then(response => {
+                const recommendationsDiv = document.getElementById('recommendations');
+                const reader = response.body.getReader();
+                let decoder = new TextDecoder('utf-8');
+
+                function read() {
+                    reader.read().then(({ done, value }) => {
+                        if (done) {
+                            return;
+                        }
+                        recommendationsDiv.innerHTML += decoder.decode(value);
+                        read();
+                    });
+                }
+                read();
+            });
+        };
+    </script>
+</body>
+
+</html>
